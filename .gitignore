@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+firebase-debug.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Build
+dist/
+build/
+.cache/
