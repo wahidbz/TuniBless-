@@ -1,0 +1,128 @@
+{
+  "appName": "TuniBless",
+  "tagline": "منظمة التطوع التونسية الألمانية",
+  "nav": {
+    "home": "الرئيسية",
+    "leaderboard": "المتصدرون",
+    "dashboard": "لوحة التحكم",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "register": "إنشاء حساب"
+  },
+  "hero": {
+    "title": "معًا نصنع الفرق",
+    "subtitle": "منظمة تطوعية تونسية ألمانية تضم 24 فرعًا عبر تونس",
+    "cta": "اكتشف فروعنا"
+  },
+  "regions": {
+    "title": "فروعنا الإقليمية",
+    "subtitle": "24 فرعًا نشطًا في جميع أنحاء تونس",
+    "activities": "النشاطات",
+    "points": "النقاط",
+    "viewMore": "عرض المزيد"
+  },
+  "activity": {
+    "title": "آخر الأنشطة",
+    "type": "نوع النشاط",
+    "normal": "عادي",
+    "big": "كبير",
+    "special": "مميز",
+    "date": "التاريخ",
+    "points": "النقاط",
+    "link": "رابط الفيسبوك",
+    "viewPost": "عرض المنشور",
+    "noActivities": "لا توجد أنشطة بعد"
+  },
+  "badges": {
+    "topState": "أفضل فرع",
+    "mostActive": "الأكثر نشاطًا",
+    "risingStar": "نجم صاعد",
+    "impactLeader": "قائد التأثير"
+  },
+  "leaderboard": {
+    "title": "المتصدرون",
+    "subtitle": "ترتيب الفروع حسب النقاط والأنشطة",
+    "rank": "الترتيب",
+    "region": "الفرع",
+    "points": "النقاط",
+    "activities": "الأنشطة",
+    "badge": "الشارة"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "addActivity": "إضافة نشاط",
+    "activityList": "قائمة الأنشطة",
+    "fbLink": "رابط منشور الفيسبوك",
+    "fbLinkPlaceholder": "https://www.facebook.com/...",
+    "activityType": "نوع النشاط",
+    "selectRegion": "اختر الفرع",
+    "submit": "إضافة النشاط",
+    "welcome": "مرحبًا",
+    "role": "الدور",
+    "coordinator": "منسق",
+    "viewer": "مشاهد",
+    "totalActivities": "إجمالي الأنشطة",
+    "totalPoints": "إجمالي النقاط",
+    "myRegion": "فرعي"
+  },
+  "auth": {
+    "loginTitle": "تسجيل الدخول",
+    "registerTitle": "إنشاء حساب جديد",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "name": "الاسم الكامل",
+    "selectState": "اختر الولاية",
+    "selectRole": "اختر الدور",
+    "loginBtn": "تسجيل الدخول",
+    "registerBtn": "إنشاء الحساب",
+    "switchToRegister": "ليس لديك حساب؟ سجل الآن",
+    "switchToLogin": "لديك حساب؟ سجل دخولك",
+    "forgotPassword": "نسيت كلمة المرور؟"
+  },
+  "toast": {
+    "loginSuccess": "تم تسجيل الدخول بنجاح!",
+    "loginError": "خطأ في تسجيل الدخول",
+    "registerSuccess": "تم إنشاء الحساب بنجاح!",
+    "registerError": "خطأ في إنشاء الحساب",
+    "activityAdded": "تم إضافة النشاط بنجاح!",
+    "duplicateLink": "هذا الرابط موجود بالفعل!",
+    "logoutSuccess": "تم تسجيل الخروج",
+    "fillFields": "يرجى ملء جميع الحقول",
+    "invalidUrl": "يرجى إدخال رابط فيسبوك صحيح"
+  },
+  "states": {
+    "tunis": "تونس",
+    "ariana": "أريانة",
+    "ben_arous": "بن عروس",
+    "manouba": "منوبة",
+    "nabeul": "نابل",
+    "zaghouan": "زغوان",
+    "bizerte": "بنزرت",
+    "beja": "باجة",
+    "jendouba": "جندوبة",
+    "kef": "الكاف",
+    "siliana": "سليانة",
+    "sousse": "سوسة",
+    "monastir": "المنستير",
+    "mahdia": "المهدية",
+    "sfax": "صفاقس",
+    "kairouan": "القيروان",
+    "kasserine": "القصرين",
+    "sidi_bouzid": "سيدي بوزيد",
+    "gabes": "قابس",
+    "mednine": "مدنين",
+    "tataouine": "تطاوين",
+    "gafsa": "قفصة",
+    "tozeur": "توزر",
+    "kebili": "قبلي"
+  },
+  "footer": {
+    "rights": "جميع الحقوق محفوظة",
+    "madeWith": "صُنع بـ ❤️ من تونس وألمانيا"
+  },
+  "points": {
+    "normal": "10 نقاط",
+    "big": "20 نقطة",
+    "special": "30 نقطة"
+  }
+}

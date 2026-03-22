@@ -1,0 +1,128 @@
+{
+  "appName": "TuniBless",
+  "tagline": "Tunesisch-Deutsche Freiwilligenorganisation",
+  "nav": {
+    "home": "Startseite",
+    "leaderboard": "Rangliste",
+    "dashboard": "Dashboard",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "register": "Registrieren"
+  },
+  "hero": {
+    "title": "Gemeinsam machen wir den Unterschied",
+    "subtitle": "Eine tunesisch-deutsche Freiwilligenorganisation mit 24 Zweigstellen in Tunesien",
+    "cta": "Unsere Zweigstellen entdecken"
+  },
+  "regions": {
+    "title": "Unsere Regionalen Zweigstellen",
+    "subtitle": "24 aktive Zweigstellen in ganz Tunesien",
+    "activities": "Aktivitäten",
+    "points": "Punkte",
+    "viewMore": "Mehr anzeigen"
+  },
+  "activity": {
+    "title": "Neueste Aktivitäten",
+    "type": "Aktivitätstyp",
+    "normal": "Normal",
+    "big": "Groß",
+    "special": "Besonders",
+    "date": "Datum",
+    "points": "Punkte",
+    "link": "Facebook-Link",
+    "viewPost": "Beitrag anzeigen",
+    "noActivities": "Noch keine Aktivitäten"
+  },
+  "badges": {
+    "topState": "Beste Zweigstelle",
+    "mostActive": "Aktivste",
+    "risingStar": "Aufsteigender Stern",
+    "impactLeader": "Impact-Leader"
+  },
+  "leaderboard": {
+    "title": "Rangliste",
+    "subtitle": "Zweigstellen-Ranking nach Punkten und Aktivitäten",
+    "rank": "Rang",
+    "region": "Zweigstelle",
+    "points": "Punkte",
+    "activities": "Aktivitäten",
+    "badge": "Abzeichen"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "addActivity": "Aktivität hinzufügen",
+    "activityList": "Aktivitätsliste",
+    "fbLink": "Facebook-Beitragslink",
+    "fbLinkPlaceholder": "https://www.facebook.com/...",
+    "activityType": "Aktivitätstyp",
+    "selectRegion": "Zweigstelle auswählen",
+    "submit": "Aktivität hinzufügen",
+    "welcome": "Willkommen",
+    "role": "Rolle",
+    "coordinator": "Koordinator",
+    "viewer": "Betrachter",
+    "totalActivities": "Gesamtaktivitäten",
+    "totalPoints": "Gesamtpunkte",
+    "myRegion": "Meine Zweigstelle"
+  },
+  "auth": {
+    "loginTitle": "Anmelden",
+    "registerTitle": "Neues Konto erstellen",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "name": "Vollständiger Name",
+    "selectState": "Gouvernement auswählen",
+    "selectRole": "Rolle auswählen",
+    "loginBtn": "Anmelden",
+    "registerBtn": "Konto erstellen",
+    "switchToRegister": "Kein Konto? Jetzt registrieren",
+    "switchToLogin": "Haben Sie ein Konto? Anmelden",
+    "forgotPassword": "Passwort vergessen?"
+  },
+  "toast": {
+    "loginSuccess": "Erfolgreich angemeldet!",
+    "loginError": "Anmeldefehler",
+    "registerSuccess": "Konto erfolgreich erstellt!",
+    "registerError": "Registrierungsfehler",
+    "activityAdded": "Aktivität erfolgreich hinzugefügt!",
+    "duplicateLink": "Dieser Link existiert bereits!",
+    "logoutSuccess": "Erfolgreich abgemeldet",
+    "fillFields": "Bitte alle Felder ausfüllen",
+    "invalidUrl": "Bitte gültigen Facebook-Link eingeben"
+  },
+  "states": {
+    "tunis": "Tunis",
+    "ariana": "Ariana",
+    "ben_arous": "Ben Arous",
+    "manouba": "Manouba",
+    "nabeul": "Nabeul",
+    "zaghouan": "Zaghouan",
+    "bizerte": "Bizerte",
+    "beja": "Béja",
+    "jendouba": "Jendouba",
+    "kef": "Le Kef",
+    "siliana": "Siliana",
+    "sousse": "Sousse",
+    "monastir": "Monastir",
+    "mahdia": "Mahdia",
+    "sfax": "Sfax",
+    "kairouan": "Kairouan",
+    "kasserine": "Kasserine",
+    "sidi_bouzid": "Sidi Bouzid",
+    "gabes": "Gabès",
+    "mednine": "Médenine",
+    "tataouine": "Tataouine",
+    "gafsa": "Gafsa",
+    "tozeur": "Tozeur",
+    "kebili": "Kébili"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten",
+    "madeWith": "Mit ❤️ aus Tunesien und Deutschland"
+  },
+  "points": {
+    "normal": "10 Punkte",
+    "big": "20 Punkte",
+    "special": "30 Punkte"
+  }
+}
