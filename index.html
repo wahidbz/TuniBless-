@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TuniBless</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/png" href="assets/logo.png"/>
+</head>
+<body>
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo-area">
+      <img src="assets/logo.png" alt="TuniBless Logo" class="logo-img"/>
+      <span class="logo-text">Tuni<span>Bless</span></span>
+    </a>
+
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active" data-i18n="nav.home"></a></li>
+        <li><a href="leaderboard.html" data-i18n="nav.leaderboard"></a></li>
+        <li id="dashNav" class="hidden"><a href="dashboard.html" data-i18n="nav.dashboard"></a></li>
+        <li id="loginNavItem"><a href="login.html" data-i18n="nav.login"></a></li>
+        <li id="logoutNavItem" class="hidden">
+          <button class="btn-logout" id="logoutBtn" data-i18n="nav.logout"></button>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <div id="userChip" class="user-chip hidden">
+        <div class="avatar" id="avatarInitial"></div>
+        <span class="user-name" id="headerUserName"></span>
+      </div>
+      <button class="lang-btn" id="langBtn">🇩🇪 DE</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="de-stripe"></div>
+
+<!-- ── PAGE ───────────────────────────────────────────────── -->
+<main class="page-wrapper">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">🌍 تونس ↔ ألمانيا</div>
+      <h1 data-i18n="hero.title">معًا نصنع <span class="highlight">الفرق</span></h1>
+      <p data-i18n="hero.subtitle">منظمة تطوعية تونسية ألمانية تضم 24 فرعًا عبر تونس</p>
+      <a href="#regions" class="btn-primary" data-i18n="hero.cta">اكتشف فروعنا ↓</a>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item">
+      <div class="stat-number" id="statBranches">24</div>
+      <div class="stat-label">فروع / Zweigstellen</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="statActivities">0</div>
+      <div class="stat-label" data-i18n="regions.activities">النشاطات</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="statPoints">0</div>
+      <div class="stat-label" data-i18n="regions.points">النقاط</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="statVolunteers">🌍</div>
+      <div class="stat-label">تونس - ألمانيا</div>
+    </div>
+  </div>
+
+  <!-- Regions -->
+  <section class="section" id="regions">
+    <div class="section-header">
+      <h2 data-i18n="regions.title">فروعنا الإقليمية</h2>
+      <p data-i18n="regions.subtitle">24 فرعًا نشطًا في جميع أنحاء تونس</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="regions-grid" id="regionsGrid">
+      <div class="loading-spinner"><div class="spinner"></div></div>
+    </div>
+  </section>
+
+  <!-- Activity Feed -->
+  <section class="section" id="feed">
+    <div class="section-header">
+      <h2 data-i18n="activity.title">آخر الأنشطة</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="activity-feed" id="activityFeed">
+      <div class="loading-spinner"><div class="spinner"></div></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-flags">🇹🇳 🤝 🇩🇪</div>
+  <div class="footer-logo">TuniBless</div>
+  <p data-i18n="footer.madeWith">صُنع بـ ❤️ من تونس وألمانيا</p>
+  <p>© 2024 TuniBless — <span data-i18n="footer.rights">جميع الحقوق محفوظة</span></p>
+</footer>
+
+<!-- ── SCRIPTS ─────────────────────────────────────────────── -->
+<script src="script.js"></script>
+<script type="module">
+import {
+  auth, db, onAuthStateChanged, signOut,
+  collection, query, orderBy, onSnapshot, getDocs
+} from "./firebase.js";
+
+// ── Auth state ─────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  const loginLi    = document.getElementById("loginNavItem");
+  const logoutLi   = document.getElementById("logoutNavItem");
+  const dashNav    = document.getElementById("dashNav");
+  const userChip   = document.getElementById("userChip");
+  const userName   = document.getElementById("headerUserName");
+  const avatarEl   = document.getElementById("avatarInitial");
+
+  if (user) {
+    loginLi.classList.add("hidden");
+    logoutLi.classList.remove("hidden");
+    dashNav.classList.remove("hidden");
+    userChip.classList.remove("hidden");
+
+    // get user profile
+    try {
+      const { doc, getDoc } = await import("./firebase.js");
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) {
+        const d = snap.data();
+        const name = d.name || user.email;
+        if (userName) userName.textContent = name.split(" ")[0];
+        if (avatarEl) avatarEl.textContent = name.charAt(0).toUpperCase();
+        document.body.classList.add(`role-${d.role}`);
+      }
+    } catch(e) { console.warn(e); }
+  } else {
+    loginLi.classList.remove("hidden");
+    logoutLi.classList.add("hidden");
+    dashNav.classList.add("hidden");
+    userChip.classList.add("hidden");
+  }
+});
+
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+  await signOut(auth);
+  showToast("logoutSuccess", "success");
+});
+
+// ── Load regions + activities ──────────────────────────────
+const STATES_LIST = [
+  "tunis","ariana","ben_arous","manouba","nabeul","zaghouan",
+  "bizerte","beja","jendouba","kef","siliana","sousse","monastir",
+  "mahdia","sfax","kairouan","kasserine","sidi_bouzid",
+  "gabes","mednine","tataouine","gafsa","tozeur","kebili"
+];
+
+let regionData = {};
+STATES_LIST.forEach(s => { regionData[s] = { activities: 0, points: 0 }; });
+
+const actQ = query(collection(db, "activities"), orderBy("createdAt", "desc"));
+onSnapshot(actQ, snap => {
+  // reset
+  STATES_LIST.forEach(s => { regionData[s] = { activities: 0, points: 0 }; });
+  const all = [];
+  snap.forEach(d => {
+    const a = { id: d.id, ...d.data() };
+    all.push(a);
+    if (regionData[a.state]) {
+      regionData[a.state].activities++;
+      regionData[a.state].points += (POINTS_MAP[a.type] || 0);
+    }
+  });
+  renderRegions();
+  renderFeed(all.slice(0, 20));
+  updateStats(all);
+}, err => {
+  // Firebase not configured yet — render with zeros
+  renderRegions();
+  renderFeed([]);
+  console.warn("Firestore not connected:", err.message);
+});
+
+function updateStats(all) {
+  document.getElementById("statActivities").textContent = all.length;
+  const pts = all.reduce((s,a) => s + (POINTS_MAP[a.type]||0), 0);
+  document.getElementById("statPoints").textContent = pts;
+}
+
+function renderRegions() {
+  const grid = document.getElementById("regionsGrid");
+  if (!grid) return;
+
+  const arr = STATES_LIST.map(s => ({ state: s, ...regionData[s] }));
+  const withBadges = assignBadges(arr);
+  const sorted = [...withBadges].sort((a,b) => b.points - a.points);
+
+  grid.innerHTML = sorted.map((r, idx) => {
+    const rank = idx + 1;
+    const stateName = t(`states.${r.state}`);
+    const badgeHTML = renderBadges(r.badges);
+    return `
+    <div class="region-card fade-in" onclick="window.location='leaderboard.html'">
+      ${rank <= 3 ? `<div class="region-rank">#${rank}</div>` : ""}
+      <div class="region-header">
+        <div class="region-name">TuniBless ${stateName}</div>
+        <div class="region-badge">${rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":"📍"}</div>
+      </div>
+      ${badgeHTML ? `<div class="mt-1">${badgeHTML}</div>` : ""}
+      <div class="region-stats">
+        <div class="region-stat">
+          <div class="region-stat-value">${r.activities}</div>
+          <div class="region-stat-label" data-i18n="regions.activities">${t("regions.activities")}</div>
+        </div>
+        <div class="region-stat">
+          <div class="region-stat-value">${r.points}</div>
+          <div class="region-stat-label">⭐ ${t("regions.points")}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderFeed(activities) {
+  const feed = document.getElementById("activityFeed");
+  if (!feed) return;
+  if (!activities.length) { showEmpty("activityFeed"); return; }
+
+  const icons = { normal:"📋", big:"📢", special:"⭐" };
+  feed.innerHTML = activities.map(a => `
+    <div class="activity-item fade-in">
+      <div class="activity-icon ${a.type}">${icons[a.type]||"📋"}</div>
+      <div class="activity-content">
+        <div class="activity-title">TuniBless ${t("states."+a.state)}</div>
+        <div class="activity-meta">
+          <span class="activity-tag tag-${a.type}">${t("activity."+a.type)}</span>
+          <span class="activity-points">⭐ ${POINTS_MAP[a.type]||0}</span>
+          <span class="activity-date">${fmtDate(a.createdAt)}</span>
+          <a href="${a.fbLink}" target="_blank" rel="noopener" class="activity-link">🔗 ${t("activity.viewPost")}</a>
+        </div>
+      </div>
+    </div>`).join("");
+}
+</script>
+</body>
+</html>

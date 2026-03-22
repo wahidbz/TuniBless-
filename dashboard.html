@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TuniBless — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/png" href="assets/logo.png"/>
+</head>
+<body>
+
+<!-- ── HEADER ────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo-area">
+      <img src="assets/logo.png" alt="TuniBless Logo" class="logo-img"/>
+      <span class="logo-text">Tuni<span>Bless</span></span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-i18n="nav.home"></a></li>
+        <li><a href="leaderboard.html" data-i18n="nav.leaderboard"></a></li>
+        <li><a href="dashboard.html" class="active" data-i18n="nav.dashboard"></a></li>
+        <li>
+          <button class="btn-logout" id="logoutBtn" data-i18n="nav.logout"></button>
+        </li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <div class="user-chip" id="userChip">
+        <div class="avatar" id="avatarInitial">?</div>
+        <span class="user-name" id="headerUserName"></span>
+      </div>
+      <button class="lang-btn" id="langBtn">🇩🇪 DE</button>
+      <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="de-stripe"></div>
+
+<main class="page-wrapper" style="padding-top:calc(var(--header-h) + 2rem)">
+
+  <!-- Welcome banner -->
+  <div style="max-width:1100px;margin:0 auto;padding:0 2rem 1.5rem">
+    <div style="background:linear-gradient(135deg,var(--secondary),#1a0000);
+                border-radius:var(--radius-md);padding:1.5rem 2rem;
+                display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <div>
+        <h2 style="color:var(--white);font-size:1.3rem">
+          <span data-i18n="dashboard.welcome"></span>
+          <span style="color:var(--accent)" id="bannerName"></span> 👋
+        </h2>
+        <p style="color:rgba(255,255,255,.6);font-size:.88rem;margin-top:.25rem">
+          <span data-i18n="dashboard.role"></span>:
+          <strong style="color:var(--accent)" id="bannerRole"></strong>
+          &nbsp;|&nbsp;
+          <span data-i18n="dashboard.myRegion"></span>:
+          <strong style="color:var(--accent)" id="bannerRegion"></strong>
+        </p>
+      </div>
+      <div style="display:flex;gap:1rem">
+        <div style="text-align:center;background:rgba(255,255,255,.07);border-radius:var(--radius-sm);padding:.8rem 1.2rem">
+          <div style="font-size:1.6rem;font-weight:800;color:var(--accent)" id="bannerActs">0</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.5)" data-i18n="dashboard.totalActivities"></div>
+        </div>
+        <div style="text-align:center;background:rgba(255,255,255,.07);border-radius:var(--radius-sm);padding:.8rem 1.2rem">
+          <div style="font-size:1.6rem;font-weight:800;color:var(--primary)" id="bannerPts">0</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.5)" data-i18n="dashboard.totalPoints"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="dashboard-grid">
+
+    <!-- ── ADD ACTIVITY CARD (coordinator only) ──────────── -->
+    <div id="addActivityCard" class="card hidden">
+      <div class="card-title">
+        <span class="icon">➕</span>
+        <span data-i18n="dashboard.addActivity"></span>
+      </div>
+
+      <form id="addActivityForm">
+        <div class="form-group">
+          <label data-i18n="dashboard.fbLink"></label>
+          <input type="url" id="fbLink"
+                 data-i18n-ph="dashboard.fbLinkPlaceholder"
+                 placeholder="https://www.facebook.com/..."
+                 required/>
+        </div>
+        <div class="form-group">
+          <label data-i18n="dashboard.activityType"></label>
+          <select id="actType" required>
+            <option value="" data-i18n="dashboard.activityType"></option>
+            <option value="normal"  data-i18n="activity.normal"></option>
+            <option value="big"     data-i18n="activity.big"></option>
+            <option value="special" data-i18n="activity.special"></option>
+          </select>
+        </div>
+
+        <!-- Points preview -->
+        <div id="pointsPreview" style="display:none;
+          background:var(--light-bg);border-radius:var(--radius-sm);
+          padding:.75rem;margin-bottom:1rem;text-align:center">
+          <span style="font-size:1.5rem;font-weight:800;color:var(--primary)" id="previewPts"></span>
+          <span style="color:var(--text-muted);font-size:.85rem"> ⭐</span>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span>➕</span><span data-i18n="dashboard.submit"></span>
+        </button>
+      </form>
+
+      <!-- Points reference -->
+      <div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1rem">
+        <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.5rem;font-weight:600">⭐ Points:</p>
+        <div style="display:flex;flex-direction:column;gap:.3rem">
+          <div style="display:flex;justify-content:space-between;font-size:.82rem">
+            <span class="activity-tag tag-normal" data-i18n="activity.normal"></span>
+            <span style="font-weight:700;color:var(--text-dark)">10 pts</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.82rem">
+            <span class="activity-tag tag-big" data-i18n="activity.big"></span>
+            <span style="font-weight:700;color:var(--text-dark)">20 pts</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.82rem">
+            <span class="activity-tag tag-special" data-i18n="activity.special"></span>
+            <span style="font-weight:700;color:var(--text-dark)">30 pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Viewer message (non-coordinators) -->
+    <div id="viewerCard" class="card hidden">
+      <div style="text-align:center;padding:2rem 1rem">
+        <div style="font-size:3rem;margin-bottom:1rem">👁️</div>
+        <h3 style="color:var(--text-dark);margin-bottom:.5rem" data-i18n="dashboard.viewer"></h3>
+        <p style="color:var(--text-muted);font-size:.9rem">
+          بإمكانك مشاهدة الأنشطة فقط / Nur Ansichtsmodus
+        </p>
+      </div>
+    </div>
+
+    <!-- ── ACTIVITY LIST ───────────────────────────────────── -->
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">📋</span>
+        <span data-i18n="dashboard.activityList"></span>
+      </div>
+      <div id="dashActivityList" class="dash-activity-list">
+        <div class="loading-spinner"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="script.js"></script>
+<script type="module">
+import {
+  auth, db, onAuthStateChanged, signOut,
+  collection, doc, getDoc, addDoc, query, where,
+  orderBy, onSnapshot, getDocs, serverTimestamp
+} from "./firebase.js";
+
+let currentUser = null;
+let userProfile = null;
+
+// ── Auth guard ────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = "login.html"; return; }
+  currentUser = user;
+
+  // Fetch profile
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists()) {
+      userProfile = snap.data();
+      setupUI(userProfile);
+      loadActivities(userProfile);
+    }
+  } catch(e) {
+    console.warn(e);
+    // allow offline demo
+    setupUI({ name: user.email, role:"viewer", state:"tunis" });
+    loadActivities({ state:"tunis" });
+  }
+});
+
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "login.html";
+});
+
+function setupUI(profile) {
+  // Banner
+  document.getElementById("bannerName").textContent = " " + (profile.name || "");
+  document.getElementById("bannerRole").textContent = t(`dashboard.${profile.role||"viewer"}`);
+  document.getElementById("bannerRegion").textContent = t(`states.${profile.state||"tunis"}`);
+  // Header
+  document.getElementById("headerUserName").textContent = (profile.name||"").split(" ")[0];
+  document.getElementById("avatarInitial").textContent = (profile.name||"?").charAt(0).toUpperCase();
+
+  // Show correct card
+  if (profile.role === "coordinator") {
+    document.getElementById("addActivityCard").classList.remove("hidden");
+  } else {
+    document.getElementById("viewerCard").classList.remove("hidden");
+  }
+  document.body.classList.add(`role-${profile.role||"viewer"}`);
+}
+
+// ── Points preview ────────────────────────────────────────
+document.getElementById("actType")?.addEventListener("change", function() {
+  const preview = document.getElementById("pointsPreview");
+  const pts     = document.getElementById("previewPts");
+  const map = { normal:10, big:20, special:30 };
+  if (this.value) {
+    preview.style.display = "block";
+    pts.textContent = map[this.value] + " pts";
+  } else {
+    preview.style.display = "none";
+  }
+});
+
+// ── Add activity form ─────────────────────────────────────
+document.getElementById("addActivityForm")?.addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!currentUser || !userProfile) return;
+
+  const fbLink = document.getElementById("fbLink").value.trim();
+  const type   = document.getElementById("actType").value;
+  const btn    = document.getElementById("submitBtn");
+
+  if (!fbLink || !type) { showToast("fillFields","warning"); return; }
+  if (!isValidFbUrl(fbLink)) { showToast("invalidUrl","warning"); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;margin:0 auto"></div>';
+
+  try {
+    // Check duplicate
+    const q = query(collection(db,"activities"), where("fbLink","==",fbLink));
+    const dup = await getDocs(q);
+    if (!dup.empty) { showToast("duplicateLink","warning"); btn.disabled=false; btn.innerHTML=`<span>➕</span><span>${t("dashboard.submit")}</span>`; return; }
+
+    await addDoc(collection(db,"activities"), {
+      fbLink, type,
+      state: userProfile.state,
+      points: POINTS_MAP[type]||10,
+      createdBy: currentUser.uid,
+      createdAt: serverTimestamp()
+    });
+
+    showToast("activityAdded","success");
+    document.getElementById("addActivityForm").reset();
+    document.getElementById("pointsPreview").style.display = "none";
+  } catch(err) {
+    console.error(err);
+    showToast(null,"error", err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<span>➕</span><span>${t("dashboard.submit")}</span>`;
+  }
+});
+
+// ── Load activities ────────────────────────────────────────
+function loadActivities(profile) {
+  const q = query(
+    collection(db,"activities"),
+    where("state","==", profile.state),
+    orderBy("createdAt","desc")
+  );
+  onSnapshot(q, snap => {
+    const list = [];
+    snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+    renderDashActivities(list);
+    document.getElementById("bannerActs").textContent = list.length;
+    document.getElementById("bannerPts").textContent = list.reduce((s,a) => s+(POINTS_MAP[a.type]||0),0);
+  }, err => {
+    console.warn(err.message);
+    renderDashActivities([]);
+  });
+}
+
+const icons = { normal:"📋", big:"📢", special:"⭐" };
+function renderDashActivities(list) {
+  const el = document.getElementById("dashActivityList");
+  if (!el) return;
+  if (!list.length) { showEmpty("dashActivityList"); return; }
+  el.innerHTML = list.map(a => `
+    <div class="activity-item fade-in">
+      <div class="activity-icon ${a.type}">${icons[a.type]||"📋"}</div>
+      <div class="activity-content">
+        <div class="activity-title">${t("states."+a.state)}</div>
+        <div class="activity-meta">
+          <span class="activity-tag tag-${a.type}">${t("activity."+a.type)}</span>
+          <span class="activity-points">⭐ ${a.points||POINTS_MAP[a.type]||10}</span>
+          <span class="activity-date">${fmtDate(a.createdAt)}</span>
+          <a href="${a.fbLink}" target="_blank" rel="noopener" class="activity-link">🔗 ${t("activity.viewPost")}</a>
+        </div>
+      </div>
+    </div>`).join("");
+}
+</script>
+</body>
+</html>

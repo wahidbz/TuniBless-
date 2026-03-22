@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TuniBless — Leaderboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" type="image/png" href="assets/logo.png"/>
+</head>
+<body>
+
+<!-- ── HEADER ────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo-area">
+      <img src="assets/logo.png" alt="TuniBless Logo" class="logo-img"/>
+      <span class="logo-text">Tuni<span>Bless</span></span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-i18n="nav.home"></a></li>
+        <li><a href="leaderboard.html" class="active" data-i18n="nav.leaderboard"></a></li>
+        <li id="dashNav" class="hidden"><a href="dashboard.html" data-i18n="nav.dashboard"></a></li>
+        <li id="loginNavItem"><a href="login.html" data-i18n="nav.login"></a></li>
+        <li id="logoutNavItem" class="hidden">
+          <button class="btn-logout" id="logoutBtn" data-i18n="nav.logout"></button>
+        </li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <div id="userChip" class="user-chip hidden">
+        <div class="avatar" id="avatarInitial"></div>
+        <span class="user-name" id="headerUserName"></span>
+      </div>
+      <button class="lang-btn" id="langBtn">🇩🇪 DE</button>
+      <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="de-stripe"></div>
+
+<main class="page-wrapper" style="padding-top:calc(var(--header-h) + 2rem)">
+
+  <!-- Hero banner -->
+  <div style="background:linear-gradient(135deg,var(--secondary),#1a0000);
+              padding:3rem 2rem;text-align:center;margin-bottom:2rem">
+    <div style="font-size:3rem;margin-bottom:.5rem">🏆</div>
+    <h1 style="color:var(--white);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800" data-i18n="leaderboard.title"></h1>
+    <p style="color:rgba(255,255,255,.6);margin-top:.5rem" data-i18n="leaderboard.subtitle"></p>
+  </div>
+
+  <div class="leaderboard-page">
+
+    <!-- ── Podium ──────────────────────────────────────── -->
+    <div class="leaderboard-podium" id="podium">
+      <div class="loading-spinner" style="grid-column:1/-1"><div class="spinner"></div></div>
+    </div>
+
+    <!-- ── Filter bar ──────────────────────────────────── -->
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;gap:.75rem;flex-wrap:wrap">
+      <select id="filterType" style="padding:.5rem .9rem;border-radius:var(--radius-sm);
+              border:2px solid var(--border);font-size:.88rem;background:var(--white);cursor:pointer">
+        <option value="all">All / الكل</option>
+        <option value="normal">Normal / عادي</option>
+        <option value="big">Big / كبير</option>
+        <option value="special">Special / مميز</option>
+      </select>
+    </div>
+
+    <!-- ── Table ───────────────────────────────────────── -->
+    <div class="leaderboard-table">
+      <div class="lb-header">
+        <div data-i18n="leaderboard.rank">#</div>
+        <div data-i18n="leaderboard.region">Region</div>
+        <div data-i18n="leaderboard.points">Points</div>
+        <div data-i18n="leaderboard.activities">Acts</div>
+        <div data-i18n="leaderboard.badge">Badge</div>
+      </div>
+      <div id="lbTableBody">
+        <div class="loading-spinner"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-flags">🇹🇳 🤝 🇩🇪</div>
+  <div class="footer-logo">TuniBless</div>
+  <p data-i18n="footer.madeWith"></p>
+  <p>© 2024 TuniBless — <span data-i18n="footer.rights"></span></p>
+</footer>
+
+<script src="script.js"></script>
+<script type="module">
+import {
+  auth, db, onAuthStateChanged, signOut,
+  collection, query, orderBy, onSnapshot, doc, getDoc
+} from "./firebase.js";
+
+const STATES_LIST = [
+  "tunis","ariana","ben_arous","manouba","nabeul","zaghouan",
+  "bizerte","beja","jendouba","kef","siliana","sousse","monastir",
+  "mahdia","sfax","kairouan","kasserine","sidi_bouzid",
+  "gabes","mednine","tataouine","gafsa","tozeur","kebili"
+];
+
+// ── Auth state ─────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  const loginLi  = document.getElementById("loginNavItem");
+  const logoutLi = document.getElementById("logoutNavItem");
+  const dashNav  = document.getElementById("dashNav");
+  const userChip = document.getElementById("userChip");
+
+  if (user) {
+    loginLi.classList.add("hidden");
+    logoutLi.classList.remove("hidden");
+    dashNav.classList.remove("hidden");
+    userChip.classList.remove("hidden");
+    try {
+      const snap = await getDoc(doc(db,"users",user.uid));
+      if (snap.exists()) {
+        const d = snap.data();
+        document.getElementById("headerUserName").textContent = (d.name||"").split(" ")[0];
+        document.getElementById("avatarInitial").textContent = (d.name||"?").charAt(0).toUpperCase();
+      }
+    } catch(e) {}
+  }
+});
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "login.html";
+});
+
+// ── Load data ──────────────────────────────────────────────
+let allActivities = [];
+let filterType = "all";
+
+const actQ = query(collection(db,"activities"), orderBy("createdAt","desc"));
+onSnapshot(actQ, snap => {
+  allActivities = [];
+  snap.forEach(d => allActivities.push({ id: d.id, ...d.data() }));
+  render();
+}, err => {
+  console.warn("Firestore not connected:", err.message);
+  render();
+});
+
+document.getElementById("filterType").addEventListener("change", function() {
+  filterType = this.value;
+  render();
+});
+
+function getRegionData() {
+  const data = {};
+  STATES_LIST.forEach(s => { data[s] = { activities:0, points:0 }; });
+  const filtered = filterType === "all" ? allActivities : allActivities.filter(a => a.type === filterType);
+  filtered.forEach(a => {
+    if (!data[a.state]) return;
+    data[a.state].activities++;
+    data[a.state].points += (POINTS_MAP[a.type]||0);
+  });
+  return STATES_LIST
+    .map(s => ({ state:s, ...data[s] }))
+    .sort((a,b) => b.points - a.points || b.activities - a.activities);
+}
+
+function render() {
+  const regions = getRegionData();
+  const withBadges = assignBadges(regions);
+  renderPodium(withBadges.slice(0,3));
+  renderTable(withBadges);
+}
+
+function renderPodium(top3) {
+  const el = document.getElementById("podium");
+  if (!el) return;
+  if (!top3.length) { el.innerHTML = ""; return; }
+
+  const order = [1,0,2]; // 2nd, 1st, 3rd
+  const medals = ["🥈","🥇","🥉"];
+  const classes = ["second","first","third"];
+
+  el.innerHTML = order.map((idx,i) => {
+    const r = top3[idx];
+    if (!r) return "";
+    return `
+    <div class="podium-item ${classes[i]} fade-in">
+      <div class="podium-rank-num">${idx+1}</div>
+      <div class="podium-medal">${medals[i]}</div>
+      <div class="podium-name">TuniBless<br>${t("states."+r.state)}</div>
+      <div class="podium-pts">${r.points} ⭐</div>
+      <div style="font-size:.8rem;color:var(--text-muted);margin-top:.3rem">
+        ${r.activities} ${t("regions.activities")}
+      </div>
+      <div style="margin-top:.5rem">${renderBadges(r.badges)}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderTable(regions) {
+  const el = document.getElementById("lbTableBody");
+  if (!el) return;
+  el.innerHTML = regions.map((r, idx) => {
+    const rank = idx + 1;
+    const cls = rank===1?"top1":rank===2?"top2":rank===3?"top3":"";
+    const rankIcon = rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":rank;
+    return `
+    <div class="lb-row ${cls} fade-in">
+      <div class="lb-rank r${rank<=3?rank:""}">${rankIcon}</div>
+      <div class="lb-name">TuniBless ${t("states."+r.state)}</div>
+      <div class="lb-pts">${r.points} ⭐</div>
+      <div class="lb-acts">${r.activities}</div>
+      <div>${renderBadges(r.badges) || "—"}</div>
+    </div>`;
+  }).join("");
+}
+</script>
+</body>
+</html>
